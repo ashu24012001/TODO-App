@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for #imports Flask and render_template class from flask module
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 app = Flask(__name__) #Flask constructor takes __name__ as argument which is name of the module(__main__ is module name if it isn't imported as a module in another script).
 # It helps Flask to determine location of Application so that it can find template and static files.
@@ -43,14 +44,15 @@ def delete(todo_id):
     db.session.commit()
     return redirect(url_for('index'))
 
+with app.app_context(): #As of Flask-SQLAlchemy 3.0, access to db.engine, db.session requires an active flask application context and db.create_all utilizes db.engine, so it requires app context.
+    db.create_all()
 
 if __name__ == "__main__":
-    with app.app_context(): #As of Flask-SQLAlchemy 3.0, access to db.engine, db.session requires an active flask application context and db.create_all utilizes db.engine, so it requires app context.
-        db.create_all() #creates all tables in DB if they don't exist already.
+        #creates all tables in DB if they don't exist already.
         # new_todo = Todo(title="Todo 1", complete=False)
         # db.session.add(new_todo) #add new todo to session
         # db.session.commit() #commit the changes to DB
-    app.run()
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
 
 '''There are 2 ways to start development server in flask:
 
