@@ -50,7 +50,7 @@ if __name__ == "__main__":
         # new_todo = Todo(title="Todo 1", complete=False)
         # db.session.add(new_todo) #add new todo to session
         # db.session.commit() #commit the changes to DB
-    app.run(debug=True)
+    app.run()
 
 '''There are 2 ways to start development server in flask:
 
